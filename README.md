@@ -1,30 +1,82 @@
-# React + TypeScript + Vite
+# Web Application Boilerplate
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This template provides a minimal setup to start developing web application.
 
-Currently, two official plugins are available:
+## Stack
+- React
+- Typescript
+- Vite
+- Tailwind
+- Firebase
+- Zustand
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How to start
 
-## Expanding the ESLint configuration
+Edit `vite.config.ts` for `outDir` (path to build) and `base` (path to run).
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Create `.env.local`, `.env.staging`, `.env.production` files for local development\staging\production and place there some variables and put Firebase credentials there:
+```
+VITE_APP_FAVICON_EMOJI="👑"
+VITE_APP_TITLE="Web App Boilderplate [local]"
+VITE_APP_HOME_FOLDER="/web-app"
+VITE_APP_FIREBASE_API_KEY=""
+VITE_APP_FIREBASE_AUTH_DOMAIN=""
+VITE_APP_FIREBASE_DATABASE_URL=""
+VITE_APP_FIREBASE_PROJECT_ID=""
+VITE_APP_FIREBASE_STORAGE_BUCKET=""
+VITE_APP_FIREBASE_MESSAGING_SENDER_ID=""
+VITE_APP_FIREBASE_APP_ID=""
+NODE_ENV=<development|production>
+```
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+Create `.firebaserc` file and put there info about your projects:
+```
+{
+  "projects": {
+    "prod": "web-app",
+    "dev": "web-app-dev",
+    "default": "web-app-dev"
+  }
 }
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Create `firebase.json` file and put there info about your projects' hosting:
+```
+{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/web-app/**",
+        "destination": "/web-app/index.html"
+      }
+    ]
+  }
+}
+```
+
+## How to run
+
+Run local:
+`pnpm run dev` 
+
+## How to build
+
+Build staging:
+`pnpm build:stage`
+
+Build production:
+`pnpm build`
+
+## How to deploy
+
+⚠️ IMPORTANT. Every your deployment will remove ALL files on Firebase hosting. Therefore, if you have multiple applications placed in subdirectories like `public/web-app`, `public\web-app-2` you'll lose all of them and only current application will be available.
+
+⚠️ You must have `firebase-tools` installed on your machine globally
+
+Deploy to Firebase hosting (staging project)
+`firebase deploy --only hosting -P dev`
+
+Deploy to Firebase hosting (production project)
+`firebase deploy --only hosting -P prod`
